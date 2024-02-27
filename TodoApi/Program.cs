@@ -8,37 +8,24 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add the database context to services as a singleton
-builder.Services.AddSingleton<ToDoDbContext>(); // Register ToDoDbContext as a singleton
+
+builder.Services.AddSingleton<ToDoDbContext>(); 
 
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyAllowAllHeadersPolicy",
-        policy =>
+    options.AddPolicy("AllowAll",
+        builder =>
         {
-            policy.WithOrigins("*")
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
                    .AllowAnyHeader();
         });
 });
 
-
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("AllowAll",
-//         builder =>
-//         {
-//             builder.AllowAnyOrigin()
-//                    .AllowAnyMethod()
-//                    .AllowAnyHeader();
-//         });
-// });
-
 var app = builder.Build();
 
-// app.UseCors("AllowAll");
-
-app.UseCors("MyAllowAllHeadersPolicy");
+app.UseCors("AllowAll");
 
 
 
@@ -52,12 +39,6 @@ app.UseCors("MyAllowAllHeadersPolicy");
 // {
 //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
 // });
-
-
-
-
-
-
 
 
 // builder.Services.AddSwaggerGen(c =>
@@ -76,37 +57,12 @@ app.UseCors("MyAllowAllHeadersPolicy");
 
 
 
-
-
-
-
-
-
 app.MapGet("/", () => "Hello World!");
 
-// Define routes for CRUD operations
-app.MapGet("/tasks", async (ToDoDbContext dbContext) =>
-{
-    // Retrieve all tasks from the database
-    var tasks = await dbContext.Items.ToListAsync();
 
-    // Check if there are any tasks in the database
-    if (tasks == null || tasks.Count == 0)
-    {
-        return "No tasks found";
-    }
-    
-
-    var taskNames = tasks.Select(t => t.Name);
-    
-    // Join the list of task names into a single string
-    var tasksString = string.Join(",\n", taskNames);
-    
-    // Return the list of tasks as a response
-    return $"Tasks:\n{tasksString}";
-
-}); 
-
+app.MapGet("/tasks", async (ToDoDbContext db) => 
+await db.Items.ToListAsync()
+);
 
 app.MapPost("/tasks", async (ToDoDbContext dbContext, HttpRequest request) =>
 {
