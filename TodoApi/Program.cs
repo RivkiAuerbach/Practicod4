@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TodoApi;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add the database context to services as a singleton
@@ -52,19 +53,26 @@ app.UseCors("MyAllowAllHeadersPolicy");
 //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
 // });
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
-});
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API v1");
-        options.RoutePrefix = string.Empty;
-    });
-}
+
+
+
+
+
+
+
+// builder.Services.AddSwaggerGen(c =>
+// {
+//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Version = "v1" });
+// });
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI(options =>
+//     {
+//         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API v1");
+//         options.RoutePrefix = string.Empty;
+//     });
+// }
 
 
 
